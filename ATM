@@ -1,0 +1,77 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ATMInterface extends JFrame implements ActionListener {
+    private JTextField cardNumberField;
+    private JPasswordField pinField;
+    private JButton loginButton;
+    private JButton balanceButton;
+    private JButton withdrawButton;
+    private JButton depositButton;
+    private JLabel messageLabel;
+
+    private double balance = 1000; // Initial balance
+
+    public ATMInterface() {
+        setTitle("ATM Interface");
+        setSize(400, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new GridLayout(4, 2));
+
+        cardNumberField = new JTextField();
+        pinField = new JPasswordField();
+        loginButton = new JButton("Login");
+        balanceButton = new JButton("Balance Inquiry");
+        withdrawButton = new JButton("Withdraw");
+        depositButton = new JButton("Deposit");
+        messageLabel = new JLabel();
+
+        add(new JLabel("Card Number:"));
+        add(cardNumberField);
+        add(new JLabel("PIN:"));
+        add(pinField);
+        add(loginButton);
+        add(balanceButton);
+        add(withdrawButton);
+        add(depositButton);
+
+        loginButton.addActionListener(this);
+        balanceButton.addActionListener(this);
+        withdrawButton.addActionListener(this);
+        depositButton.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == loginButton) {
+            // Dummy check for demonstration
+            if (cardNumberField.getText().equals("123456") && String.valueOf(pinField.getPassword()).equals("1234")) {
+                messageLabel.setText("Login successful!");
+            } else {
+                messageLabel.setText("Invalid card number or PIN.");
+            }
+        } else if (e.getSource() == balanceButton) {
+            messageLabel.setText("Your balance: $" + balance);
+        } else if (e.getSource() == withdrawButton) {
+            double amount = Double.parseDouble(JOptionPane.showInputDialog("Enter withdrawal amount:"));
+            if (amount <= balance) {
+                balance -= amount;
+                messageLabel.setText("Withdrawal successful. Remaining balance: $" + balance);
+            } else {
+                messageLabel.setText("Insufficient funds.");
+            }
+        } else if (e.getSource() == depositButton) {
+            double amount = Double.parseDouble(JOptionPane.showInputDialog("Enter deposit amount:"));
+            balance += amount;
+            messageLabel.setText("Deposit successful. Current balance: $" + balance);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            ATMInterface atmInterface = new ATMInterface();
+            atmInterface.setVisible(true);
+        });
+    }
+}
